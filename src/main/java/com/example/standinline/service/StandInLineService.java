@@ -1,5 +1,6 @@
 package com.example.standinline.service;
 
+import com.example.standinline.model.Response;
 import com.example.standinline.repository.StandInlineRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,17 @@ public class StandInLineService {
         return standInlineRepo.save();
     }
 
-    public Integer next() {
-        return standInlineRepo.getFirst();
+    public Response next() {
+        Integer position = standInlineRepo.getFirst();
+
+        standInlineRepo.saveAlert(position);
+
+        return Response.builder()
+                .position(position.toString())
+                .inline(standInlineRepo.getAllInLine())
+                .out(standInlineRepo.getAllOut())
+                .alert(position.toString())
+                .build();
     }
 
     public Integer nextAgain() {
@@ -38,5 +48,30 @@ public class StandInLineService {
 
     public LinkedList<Integer> allOut() {
         return standInlineRepo.getAllOut();
+    }
+
+    public Response getLineState() {
+        return Response.builder()
+                .position(standInlineRepo.getLastOut().toString())
+                .inline(standInlineRepo.getAllInLine())
+                .out(standInlineRepo.getAllOut())
+                .build();
+    }
+
+    public Response alertNext() {
+        return Response.builder()
+                .position(standInlineRepo.getLastOut().toString())
+                .out(standInlineRepo.getAllOut())
+                .alert(standInlineRepo.getAlert().toString())
+                .build();
+    }
+
+    public Response alertNextAgain(String position) {
+        standInlineRepo.saveAlert(Integer.parseInt(position));
+
+        return Response.builder()
+                .position(standInlineRepo.getLastOut().toString())
+                .alert(position)
+                .build();
     }
 }

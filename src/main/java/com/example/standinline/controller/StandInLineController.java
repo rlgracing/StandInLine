@@ -18,21 +18,13 @@ public class StandInLineController {
     private final StandInLineService standInLineService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Response> line() {
-        return ResponseEntity.ok(Response.builder()
-                .position(standInLineService.nextAgain().toString())
-                .inline(standInLineService.allInLine())
-                .out(standInLineService.allOut())
-                .build());
+    public ResponseEntity<Response> lineState() {
+        return ResponseEntity.ok(standInLineService.getLineState());
     }
 
     @GetMapping(path = "/next/show", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response> showNext() {
-        return ResponseEntity.ok(Response.builder()
-                .position(standInLineService.nextAgain().toString())
-                .out(standInLineService.allOut())
-                .alert(standInLineService.getAlert().toString())
-                .build());
+        return ResponseEntity.ok(standInLineService.alertNext());
     }
 
     @GetMapping(path = "/new", produces = MediaType.TEXT_PLAIN_VALUE)
@@ -42,27 +34,11 @@ public class StandInLineController {
 
     @GetMapping(path = "/next", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response> next() {
-
-        Integer position = standInLineService.next();
-
-        standInLineService.saveAlert(position);
-
-        return ResponseEntity.ok(Response.builder()
-                .position(position.toString())
-                .inline(standInLineService.allInLine())
-                .out(standInLineService.allOut())
-                .alert(position.toString())
-                .build());
+        return ResponseEntity.ok(standInLineService.next());
     }
 
     @GetMapping(path = "/next/again/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response> nextAgain(@PathVariable("id") String id) {
-
-        standInLineService.saveAlert(Integer.parseInt(id));
-
-        return ResponseEntity.ok(Response.builder()
-                .position(standInLineService.nextAgain().toString())
-                .alert(id)
-                .build());
+        return ResponseEntity.ok(standInLineService.alertNextAgain(id));
     }
 }
