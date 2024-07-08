@@ -11,7 +11,7 @@
 
         function callLineAdmin() {
             $.ajax({
-                url: "/line",
+                url: "/line/admin",
                 type: "GET",
                 dataType: "json",
                 success: renderLines,
@@ -23,7 +23,7 @@
 
         function callShowAgain(position) {
             $.ajax({
-                url: "/line/next/again/" + position,
+                url: "/line/admin/next/again/" + position,
                 type: "GET",
                 dataType: "json",
                 error: function(data) {
@@ -34,7 +34,7 @@
 
         function callNext() {
             $.ajax({
-                url: "/line/next",
+                url: "/line/admin/next",
                 type: "GET",
                 dataType: "json",
                 error: function(data) {
@@ -64,10 +64,6 @@
 
             $("#inLine").html(contentInline);
             $("#outLine").html(contentOut);
-
-            $( "#target" ).on( "click", function() {
-                alert( "Handler for `click` called." );
-            } );
 
             if(inline.length > 0) {
                 $("#next").html('<input type="button" value="NEXT" onclick="callNext()" />');

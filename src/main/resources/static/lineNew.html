@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        function callLineNew() {
+            $.ajax({
+                url: "/line/new",
+                type: "GET",
+                dataType: "json",
+                success: render,
+                error: function(data) {
+                    console.log("ERROR: " + JSON.stringify(data));
+                }
+            });
+        }
+
+        function render(data) {
+            $("#position").html("<h1>"+data+"</h1>");
+        }
+    </script>
+</head>
+<body>
+<table>
+    <tr>
+        <td  style="vertical-align:top;">
+            POSITION:
+            <div id="position"></div>
+            <input type="button" value="NEW" onclick="callLineNew()" />
+        </td>
+    </tr>
+</table>
+</body>
+</html>

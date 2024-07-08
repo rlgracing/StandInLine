@@ -17,11 +17,6 @@ public class StandInLineController {
 
     private final StandInLineService standInLineService;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Response> lineState() {
-        return ResponseEntity.ok(standInLineService.getLineState());
-    }
-
     @GetMapping(path = "/next/show", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Response> showNext() {
         return ResponseEntity.ok(standInLineService.alertNext());
@@ -30,15 +25,5 @@ public class StandInLineController {
     @GetMapping(path = "/new", produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> newInLine() {
         return ResponseEntity.ok(standInLineService.newInLine().toString());
-    }
-
-    @GetMapping(path = "/next", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Response> next() {
-        return ResponseEntity.ok(standInLineService.next());
-    }
-
-    @GetMapping(path = "/next/again/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Response> nextAgain(@PathVariable("id") String id) {
-        return ResponseEntity.ok(standInLineService.alertNextAgain(id));
     }
 }
