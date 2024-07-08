@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function (){
+            // console.log("teste");
+            setInterval(callLineAdmin, 2000);
+//            callLineAdmin();
+        })
+
+        function callLineAdmin() {
+            $.ajax({
+                url: "/line",
+                type: "GET",
+                dataType: "json",
+                success: renderLines,
+                error: function(data) {
+                    console.log("ERROR: " + JSON.stringify(data));
+                }
+            });
+        }
+
+        function callShowAgain(position) {
+            $.ajax({
+                url: "/line/next/again/" + position,
+                type: "GET",
+                dataType: "json",
+                error: function(data) {
+                    console.log("ERROR: " + JSON.stringify(data));
+                }
+            });
+        }
+
+        function callNext() {
+            $.ajax({
+                url: "/line/next",
+                type: "GET",
+                dataType: "json",
+                error: function(data) {
+                    console.log("ERROR: " + JSON.stringify(data));
+                }
+            });
+        }
+
+        function renderLines(data) {
+            // console.log("SUCCESS: " + JSON.stringify(data));
+            const position = data.position;
+            const inline = data.inline;
+            // console.log("INLINE: " + inline);
+            const out = data.out;
+            // console.log("OUT: " + out);
+            let contentInline = '';
+            let contentOut = '';
+
+            $.each(inline, function(i, item) {
+                contentInline += item + "<br>";
+            })
+            $.each(out, function(i, item) {
+                contentOut += item + "<br>";
+            })
+
+            $("#position").html("<h1>"+position+"</h1>").attr("onClick", "callShowAgain("+position+")");
+
+            $("#inLine").html(contentInline);
+            $("#outLine").html(contentOut);
+
+            $( "#target" ).on( "click", function() {
+                alert( "Handler for `click` called." );
+            } );
+
+            if(inline.length > 0) {
+                $("#next").html('<input type="button" value="NEXT" onclick="callNext()" />');
+            } else {
+                $("#next").html('');
+            }
+
+        }
+    </script>
+</head>
+<body>
+<table>
+    <tr>
+        <td  style="vertical-align:top;">
+            IN:
+            <div id="inLine"></div>
+        </td>
+        <td  style="vertical-align:top;">
+            OUT:
+            <div id="outLine"></div>
+        </td>
+        <td  style="vertical-align:top;">
+            POSITION:
+            <div id="position"></div>
+        </td>
+    </tr>
+    <div id="next"></div>
+</table>
+</body>
+</html>

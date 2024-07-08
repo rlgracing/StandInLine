@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function (){
+            // console.log("teste");
+            setInterval(callLineAdmin, 5000);
+//            callLineAdmin();
+        })
+
+        function callLineAdmin() {
+            $.ajax({
+                url: "/line/next/show",
+                type: "GET",
+                dataType: "json",
+                success: render,
+                error: function(data) {
+                    console.log("ERROR: " + JSON.stringify(data));
+                }
+            });
+        }
+
+        function render(data) {
+            // console.log("SUCCESS: " + JSON.stringify(data));
+            const position = data.position;
+            const alert = data.alert;
+            const out = data.out;
+            // console.log("OUT: " + out);
+            let contentOut = '';
+
+            $.each(out, function(i, item) {
+                contentOut += item + "<br>";
+            })
+
+            $("#position").html("<h1>"+position+"</h1>");
+            $("#outLine").html(contentOut);
+
+            if(alert !== "0" && position === alert) {
+                $("#position").fadeOut(500).fadeIn(500).fadeOut(500).fadeIn(500);
+            }
+
+        }
+    </script>
+</head>
+<body>
+<table>
+    <tr>
+        <td  style="vertical-align:top;">
+            POSITION:
+            <div id="position"></div>
+        </td>
+        <td  style="vertical-align:top;">
+            OUT:
+            <div id="outLine"></div>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
